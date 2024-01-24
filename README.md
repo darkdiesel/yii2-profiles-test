@@ -2,27 +2,67 @@
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
     </a>
-    <h1 align="center">Yii 2 Advanced Project Template</h1>
+    <h1 align="center">Yii 2 User Profiles</h1>
     <br>
 </p>
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](https://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+## Table of content
+- [Task](#task)
+- [Project Structure](#project-structure)
+- [Install](#install)
+- [Run](#run-application)
+- [Migration](#migration)
+- [Useful commands](#useful-commands)
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+## Task
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
+### Разработать приложение «Кабинет пользователя»
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+#### Приложение должно предоставлять возможность:
+ - вход в личный кабинет (редактирование/удаление данных)
+ - регистрации нового пользователя;
+ - администрирование пользователей.
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![build](https://github.com/yiisoft/yii2-app-advanced/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-advanced/actions?query=workflow%3Abuild)
+#### Пользователи должны разделяться на две роли:
+ - Администратор
+ - Подписчик
 
-DIRECTORY STRUCTURE
--------------------
+Роль «Подписчик» назначается пользователю при  регистрации. Пользователи с ролью «Администратор», могут добавляться только Администратором, через систему управления.
+
+#### Интерфейс личного кабинета пользователя с ролью «Подписчик»:
+ - Возможность редактирования личных данных.
+ - Просмотр  файлов прикрепленных администратором (возможность скачивания).
+ - Возможность удаления своего профайла.
+
+##### Обязательные данные о пользователе:
+ - Фамилия
+ - Имя
+ - Отчество
+ - Дата рождения
+ - Профессия
+ - Фото
+ - Логин
+ - Пароль
+ - Роль пользователя
+ - Дата регистрации (для администратора)
+ - Дата последнего входа в систему (для администратора)
+ - Дата последнего редактирования личных данных (для администратора)
+
+#### Интерфейс личного кабинета пользователя с ролью «Администратор»:
+ - Добавление нового пользователя
+ - Просмотр списка зарегистрированных пользователей
+ - Редактирование информации пользователей
+ - Удаление профайлов пользователей
+ - Добавление файлов (любого типа) для каждого пользователя. Возможность в дальнейшем удалять файлы.
+
+#### Обязательные требования:
+ - Разработать структуру хранения данных, наилучшим образом подходящие для реализации этой функциональности.
+ - Использовать ООП
+
+* Рекомендация: для облегчения разработки интерфейса использовать Bootstrap.
+
+
+## Project structure
 
 ```
 common
@@ -58,3 +98,40 @@ frontend
 vendor/                  contains dependent 3rd-party packages
 environments/            contains environment-based overrides
 ```
+
+## Install
+
+1. Install via command: ```composer create-project --prefer-dist yiisoft/yii2-app-advanced yii-application```
+2. Init : ```php init```
+3. Create DB and update **common/config/main-local.php**
+4. Run migration ```php yii migrate```
+
+## Run application:
+
+1. Use docker, vagrant or setup 2 hosts `admin` to `/backend/web` and `front` to `frontend/web`
+2. Open site with browser and go to sign up page.
+3. Fill fields and create user.
+4. Go to `frontend\runtime\mail\` and open `*.eml file`
+5. Copy confirm url from file and made some next modification to it:
+    - for example we have next url:
+   ```
+    http://user-profiles.loc/index.p=
+    hp?r=3Dsite%2Fverify-email&amp;token=3DL13CX6Fro9E_MYdJ8gGRK_0GCleoRpBa_170=
+    2598408
+   ```
+- delete soft line breaks ‘=’ and newlines to create a single line with the line below
+- change ‘=3D’ to ‘=’ // after r and after token
+- change ‘&amp;‘ to '&'
+- change ‘%2F‘ to ‘/‘
+- and we have `http://user-profiles.loc/index.php?r=site/verify-email&token=3DL13CX6Fro9E_MYdJ8gGRK_0GCleoRpBa_1702598408`
+- put this url to browser and if everything is ok your user will be verified
+
+## Useful commands:
+
+```Coming Soon!```
+
+## Migration:
+* Create migration: `yii migrate/create create_news_table`
+* Run migration ```php yii migrate```
+* Revert last migration ```yii migrate/redo```
+* Refresh migration ```yii migrate/fresh ```
